@@ -15,16 +15,16 @@ const data = {
     { id: 3, name: "Tam Herton", is_captain: false },
   ],
   quotes: [
-    { id: 1, text: "Pass the rock!!", playerId: 1 },
+    { id: 1, text: "Pass the rock!!", player_id: 1 },
     {
       id: 2,
       text: "Our strategy is to score more goalpoints than the opposing team.",
-      playerId: 2,
+      player_id: 2,
     },
     {
       id: 3,
       text: "It's like the coach says, there's no 'w' in 'team'.",
-      playerId: 2,
+      player_id: 2,
     },
   ],
 };
@@ -34,12 +34,18 @@ const data = {
  * @returns { Promise<void> }
  */
 exports.seed = function (knex) {
-  const { players } = data;
+  const { players, quotes } = data;
 
   // Deletes ALL existing entries
-  return knex("player")
+  return knex("quote")
     .del()
-    .then(function () {
-      return knex("player").insert(players);
-    });
+    .then(() => {
+      return knex("player").del();
+    })
+    .then(() => {
+      return knex("player").insert(players)
+    })
+    .then(() => {
+      return knex("quote").insert(quotes);
+    })
 };
